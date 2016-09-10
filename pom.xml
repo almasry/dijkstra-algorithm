@@ -4,23 +4,145 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>thoughtworks</groupId>
-    <artifactId>trains</artifactId>
+    <groupId>com.thoughtworks</groupId>
+    <artifactId>trains-problem</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <description>Trains Command Line Interface (CLI) Maven project.</description>
 
-
     <properties>
+
+        <!-- Project properties -->
+        <project.basedir.all>${project.basedir}/..</project.basedir.all>
+        <project.build.directory>${project.basedir.all}/targets</project.build.directory>
+
+
+        <!-- Project build CLI properties -->
+        <project.build.cliDirectory>${project.build.directory}/${project.artifactId}</project.build.cliDirectory>
+        <project.build.cliBinDirectory>${project.build.cliDirectory}</project.build.cliBinDirectory>
+        <project.build.cliConfDirectory>${project.build.cliDirectory}/conf</project.build.cliConfDirectory>
+        <project.build.cliLibDirectory>${project.build.cliDirectory}/lib</project.build.cliLibDirectory>
+
+        <!-- Project build CLI source properties -->
+        <project.build.cliSourceDirectory>${project.basedir}/src/main/java</project.build.cliSourceDirectory>
+
 
         <!-- Project Encoding properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+        <!-- dependency versions -->
+        <trains.version>1.0.0-SNAPSHOT</trains.version>
+        <version.mockito>1.10.19</version.mockito>
         <version.junit>4.12</version.junit>
         <version.junit.dataprovider>1.10.0</version.junit.dataprovider>
 
     </properties>
+
+    <build>
+
+        <plugins>
+
+            <!-- to be reviewed in details to separate tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                    </execution>
+                    <execution>
+                        <id>test-integration</id>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- used only to detect version but not to enforce anything ! -->
+            <!-- run : mvn enforcer:display-info  to find out -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-java-version</id>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>process-classes</phase>
+                    </execution>
+                    <execution>
+                        <id>test-jar</id>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-programs-cli</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>assemble</goal>
+                        </goals>
+                        <configuration>
+                            <assembleDirectory>${project.build.cliBinDirectory}</assembleDirectory>
+
+                            <extraJvmArguments>
+                                -Xms512m -Xmx1024m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:ParallelGCThreads=4 -XX:ConcGCThreads=4 -Dloader.main=gov.hhs.onc.crigtt.context.impl.CrigttApplicationConfiguration
+                            </extraJvmArguments>
+
+                            <platforms>
+                                <platform>unix</platform>
+                                <platform>windows</platform>
+                            </platforms>
+                            <programs>
+                                <program>
+                                    <id>${project.artifactId}</id>
+                                    <mainClass>com.thoughtworks.trains.Trains</mainClass>
+                                </program>
+                            </programs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>com.thoughtworks.trains.Trains</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+
+    </build>
 
     <dependencies>
         <dependency>
@@ -29,6 +151,12 @@
             <version>${version.junit}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.jmockit</groupId> <artifactId>jmockit</artifactId> <version>1.27</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>
