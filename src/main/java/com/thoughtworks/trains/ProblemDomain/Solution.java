@@ -40,17 +40,17 @@ public final class Solution {
     }
 
     /**
-     * @throws Exception if it fails to prepare the inputs needed for the algorithm (edge and city repositories)
+     * @throws Exception if it fails to prepare the elements needed for the algorithm (both edge and city repositories)
      */
     private void prepareProblem() throws Exception
     {
         // generating problem elements
         ArrayList<String> problemInputs = this.getValidProblemInputs();
 
-        ProblemFactory problemFactory = new ProblemFactory(problemInputs);
+        ProblemElementsFactory problemElementsFactory = new ProblemElementsFactory(problemInputs);
 
-        this.edgeRepository = problemFactory.getEdgeRepository();
-        this.cityRepository = problemFactory.getCityRepository();
+        this.edgeRepository = problemElementsFactory.getEdgeRepository();
+        this.cityRepository = problemElementsFactory.getCityRepository();
     }
 
     /**

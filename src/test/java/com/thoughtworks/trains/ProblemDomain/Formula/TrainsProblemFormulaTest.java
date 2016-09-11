@@ -1,29 +1,13 @@
 package com.thoughtworks.trains.ProblemDomain.Formula;
 
 import com.thoughtworks.trains.Exception.InvalidProblemStatementException;
-import com.thoughtworks.trains.ProblemDomain.Edge;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
 public class TrainsProblemFormulaTest {
-    @Before
-    public void setUp() throws Exception {
-
-
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
-    }
 
     @Test
     public void getValidProblemInputs() throws Exception {

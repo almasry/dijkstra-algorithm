@@ -1,4 +1,4 @@
-package com.thoughtworks.trains.Exception;
+package com.thoughtworks.trains.Exception.ExceptionHandler;
 
 public class CliApplicationExceptionHandler extends Exception {
 

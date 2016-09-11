@@ -1,6 +1,6 @@
 package com.thoughtworks.trains.ProblemDomain.Algorithm;
 
-import com.thoughtworks.trains.ProblemDomain.City;
+import com.thoughtworks.trains.ProblemDomain.Entity.City;
 
 class Route {
 

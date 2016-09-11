@@ -2,7 +2,7 @@ package com.thoughtworks.trains.ProblemDomain.Respository;
 
 import com.thoughtworks.trains.Infrastrucure.Storage.HeapStorage;
 import com.thoughtworks.trains.Infrastrucure.Storage.IStorage;
-import com.thoughtworks.trains.ProblemDomain.City;
+import com.thoughtworks.trains.ProblemDomain.Entity.City;
 
 import java.util.ArrayList;
 
@@ -21,7 +21,7 @@ public class CityRepository{
     public void addCity(City city){
 
         // checking if the city is already registered in the cities list
-        for (City c : this.storage.getAllObjects())
+        for (City c : this.storage.getAllEntities())
         {
             if(c.getCityName().equals(city.getCityName())) {
                 // city has been created before
@@ -37,7 +37,7 @@ public class CityRepository{
      */
     public City getCityByName(String name) {
 
-        for (City c : this.storage.getAllObjects())
+        for (City c : this.storage.getAllEntities())
         {
             if(c.getCityName().equals(name)) {
                 // city has been created before
@@ -45,5 +45,13 @@ public class CityRepository{
             }
         }
         return null;
+    }
+
+    /**
+     * @return ArrayList of all cities in storage
+     */
+    public ArrayList<City> getAllCities()
+    {
+        return this.storage.getAllEntities();
     }
 }

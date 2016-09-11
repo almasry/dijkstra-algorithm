@@ -6,21 +6,21 @@ public class HeapStorage<T> implements IStorage<T>{
 
     private ArrayList<T> repository;
 
-    public HeapStorage(ArrayList<T> object){
-        this.repository = object;
+    public HeapStorage(ArrayList<T> entity){
+        this.repository = entity;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void create(T object){
-        this.repository.add(object);
+    public void create(T entity){
+        this.repository.add(entity);
     }
 
     /**
      * {@inheritDoc}
      */
-    public ArrayList<T> getAllObjects(){
+    public ArrayList<T> getAllEntities(){
         return this.repository;
     }
 }

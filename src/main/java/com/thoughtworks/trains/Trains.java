@@ -1,6 +1,6 @@
 package com.thoughtworks.trains;
 
-import com.thoughtworks.trains.Exception.*;
+import com.thoughtworks.trains.Exception.ExceptionHandler.CliApplicationExceptionHandler;
 import com.thoughtworks.trains.ProblemDomain.*;
 import com.thoughtworks.trains.ProblemDomain.Algorithm.*;
 import com.thoughtworks.trains.Utility.InputHandler.*;
@@ -22,6 +22,7 @@ public class Trains {
         IProblemStatementReader reader = new ProblemFileReader();
         String problemStatement = reader.getProblemStatement();
 
+        // creating the solution using DijkstraAlgorithm
         Class<? extends ITrainsAlgorithm> solutionAlgorithm = DijkstraAlgorithm.class;
 
         Solution solution = new Solution(
@@ -29,8 +30,7 @@ public class Trains {
                 solutionAlgorithm
         );
 
-        //Solving sub problems
-
+        // Solving sub problems and rendering the results
         SubProblems subProblems = new SubProblems(solution);
 
         ISolutionRenderer solutionViewer = new PromptSolutionViewer();

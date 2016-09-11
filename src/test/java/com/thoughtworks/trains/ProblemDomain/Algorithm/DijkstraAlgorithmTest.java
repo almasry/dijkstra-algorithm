@@ -17,7 +17,10 @@ public class DijkstraAlgorithmTest {
     @Before
     public void setUp() throws Exception {
 
-        this.solution = new Solution("Graph: AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7", DijkstraAlgorithm.class);
+        this.solution = new Solution(
+                "Graph: AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7",
+                DijkstraAlgorithm.class
+        );
 
     }
 
@@ -74,6 +77,7 @@ public class DijkstraAlgorithmTest {
     @Test (expected = RouteNotFoundException.class)
     public void findLengthOfRouteFailure1() throws Exception{
 
+        // testing with invalid route
         ArrayList<String> cities = new ArrayList<>();
 
         cities.add("A");
@@ -89,6 +93,8 @@ public class DijkstraAlgorithmTest {
 
         ArrayList<String> cities = new ArrayList<>();
 
+        // testing with a city that was not part of the problem statement
+
         cities.add("A");
         cities.add("C");
         cities.add("G");
@@ -100,11 +106,25 @@ public class DijkstraAlgorithmTest {
     @Test
     public void findLengthOfShortestRoute() throws Exception {
 
+        int lengthOfShortestRoute = this.solution.getSolutionAlgorithm()
+                                                 .findLengthOfShortestRoute("B", "B");
+
+        assertEquals(lengthOfShortestRoute, 9);
     }
 
     @Test
     public void findNumberOfTrips() throws Exception {
 
+        int numberOfTrips = this.solution.getSolutionAlgorithm()
+                                         .findNumberOfTrips(
+                                              "C",
+                                              "C",
+                                              ITrainsAlgorithm.ComparisonOperation.NUMBER_OF_STOPS,
+                                              ITrainsAlgorithm.Operator.EQUAL_ORL_ESS,
+                                              3
+                                         );
+
+        assertEquals(numberOfTrips, 2);
     }
 
 }

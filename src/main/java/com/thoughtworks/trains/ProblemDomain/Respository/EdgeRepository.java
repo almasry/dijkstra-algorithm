@@ -2,8 +2,8 @@ package com.thoughtworks.trains.ProblemDomain.Respository;
 
 import com.thoughtworks.trains.Infrastrucure.Storage.HeapStorage;
 import com.thoughtworks.trains.Infrastrucure.Storage.IStorage;
-import com.thoughtworks.trains.ProblemDomain.City;
-import com.thoughtworks.trains.ProblemDomain.Edge;
+import com.thoughtworks.trains.ProblemDomain.Entity.City;
+import com.thoughtworks.trains.ProblemDomain.Entity.Edge;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -12,7 +12,8 @@ public class EdgeRepository{
 
     private IStorage<Edge> storage;
 
-    public EdgeRepository(){
+    public EdgeRepository()
+    {
         ArrayList<Edge> edgeList= new ArrayList<>();
         this.storage = new HeapStorage<>(edgeList);
     }
@@ -22,7 +23,7 @@ public class EdgeRepository{
      */
     public ArrayList<Edge> getAllEdges()
     {
-        return this.storage.getAllObjects();
+        return this.storage.getAllEntities();
     }
 
     /**
@@ -30,7 +31,7 @@ public class EdgeRepository{
      */
     public void addEdge(Edge edge)
     {
-        for (Edge e : this.storage.getAllObjects())
+        for (Edge e : this.storage.getAllEntities())
         {
             if(e.getStart() == edge.getStart() && e.getEnd() == edge.getEnd()) {
                 // city has been created before
@@ -47,7 +48,7 @@ public class EdgeRepository{
     public ArrayList<Edge> fetchByStartCity(City city)
     {
         return EdgeRepository
-                .this.storage.getAllObjects()
+                .this.storage.getAllEntities()
                 .stream()
                 .filter(edge -> edge.getStart().getCityName().equals(city.getCityName()))
                 .collect(Collectors.toCollection(ArrayList::new));

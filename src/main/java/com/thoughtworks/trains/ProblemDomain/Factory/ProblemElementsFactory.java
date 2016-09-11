@@ -1,54 +1,53 @@
 package com.thoughtworks.trains.ProblemDomain.Factory;
 
 import com.thoughtworks.trains.Exception.InvalidProblemStatementException;
-import com.thoughtworks.trains.ProblemDomain.City;
-import com.thoughtworks.trains.ProblemDomain.Edge;
+import com.thoughtworks.trains.ProblemDomain.Entity.City;
+import com.thoughtworks.trains.ProblemDomain.Entity.Edge;
 import com.thoughtworks.trains.ProblemDomain.Respository.CityRepository;
 import com.thoughtworks.trains.ProblemDomain.Respository.EdgeRepository;
 
 import java.util.ArrayList;
 
-public class ProblemFactory {
+public class ProblemElementsFactory {
 
     private EdgeRepository edgeRepository;
-
     private CityRepository cityRepository;
 
-    private ArrayList<String> routeStrings;
+    private ArrayList<String> edgeStrings;
 
     /**
      * @param edgeStrings the string of edges as in: (AB1, AC2, DE3, FD5, .. )
-     * @throws InvalidProblemStatementException
+     * @throws InvalidProblemStatementException if it fails to generate problem elements
      */
-    public ProblemFactory(ArrayList<String> edgeStrings) throws InvalidProblemStatementException
+    public ProblemElementsFactory(ArrayList<String> edgeStrings) throws InvalidProblemStatementException
     {
-        this.routeStrings = edgeStrings;
+        this.edgeStrings = edgeStrings;
         this.edgeRepository = new EdgeRepository();
         this.cityRepository = new CityRepository();
 
-        this.generateProblemInputs();
+        this.generateProblemElements();
     }
 
     /**
-     * @throws InvalidProblemStatementException
+     * @throws InvalidProblemStatementException if it fails to generate problem elements
      */
-    private void generateProblemInputs() throws InvalidProblemStatementException
+    private void generateProblemElements() throws InvalidProblemStatementException
     {
-        for (String routeString : this.routeStrings) {
-            ArrayList<City> cities = this.getEdgeCities(routeString);
+        for (String edgeString : this.edgeStrings) {
+            ArrayList<City> cities = this.getEdgeCities(edgeString);
 
-            this.createEdges(cities, routeString);
+            this.createEdges(cities, edgeString);
         }
     }
 
     /**
-     * @param routeString
-     * @return
+     * @param edgeString string that represents the edge
+     * @return list of the cities generated from the edge
      */
-    private ArrayList<City> getEdgeCities(String routeString)
+    private ArrayList<City> getEdgeCities(String edgeString)
     {
-        City startCity = new City(Character.toString(routeString.charAt(0))) ;
-        City endCity = new City(Character.toString(routeString.charAt(1))) ;
+        City startCity = new City(Character.toString(edgeString.charAt(0))) ;
+        City endCity = new City(Character.toString(edgeString.charAt(1))) ;
 
         this.cityRepository.addCity(startCity);
         this.cityRepository.addCity(endCity);
@@ -62,19 +61,20 @@ public class ProblemFactory {
     }
 
     /**
-     * @param cities
-     * @param edgeString
-     * @throws InvalidProblemStatementException
+     * @param edgeCities array of both the start and end cities of the edge after being processed (extracted)
+     * @param edgeString the string that represents the edge
+     * @throws InvalidProblemStatementException if it fails to create a valid edge repository
      */
-    private void createEdges(ArrayList<City> cities, String edgeString) throws InvalidProblemStatementException
+    private void createEdges(ArrayList<City> edgeCities, String edgeString) throws InvalidProblemStatementException
     {
-        StringBuilder stringBuilder = new StringBuilder(edgeString);
+        City startCity = edgeCities.get(0);
+        City endCity   = edgeCities.get(1);
 
+        // preparing the edge to be parsed and deleting city names from the edge
+        StringBuilder stringBuilder = new StringBuilder(edgeString);
         stringBuilder.delete(0,2);
 
-        City startCity = cities.get(0);
-        City endCity   = cities.get(1);
-
+        // parsing edge length
         int edgeLength = Integer.parseInt(stringBuilder.toString());
 
         Edge edge = new Edge(startCity, endCity, edgeLength);
@@ -87,7 +87,7 @@ public class ProblemFactory {
             // making sure the edge doesn't start and end at the same city
             if(nameOfStartCity.equals(nameOfEndCity))
             {
-                throw new InvalidProblemStatementException(edgeString+ " : edge can't start and end at the same city ..");
+                throw new InvalidProblemStatementException(edgeString+ " : edge can't start and end at the same city..");
             }
 
             // making sure the edge is not registered before (eg:  you can't have AB5 and AB8 at the same problem)

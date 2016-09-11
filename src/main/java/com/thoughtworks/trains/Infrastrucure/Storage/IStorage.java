@@ -12,12 +12,12 @@ import java.util.ArrayList;
 public interface IStorage<T> {
 
     /**
-     * @param object add a new (record) of the object to the storage
+     * @param entity add a new (record) of the object to the storage
      */
-    void create(T object);
+    void create(T entity);
 
     /**
      * @return retrieves all objects in the sotrage
      */
-    ArrayList<T> getAllObjects();
+    ArrayList<T> getAllEntities();
 }

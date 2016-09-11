@@ -1,8 +1,8 @@
 package com.thoughtworks.trains.ProblemDomain.Algorithm;
 
 import com.thoughtworks.trains.Exception.RouteNotFoundException;
-import com.thoughtworks.trains.ProblemDomain.City;
-import com.thoughtworks.trains.ProblemDomain.Edge;
+import com.thoughtworks.trains.ProblemDomain.Entity.City;
+import com.thoughtworks.trains.ProblemDomain.Entity.Edge;
 import com.thoughtworks.trains.ProblemDomain.Respository.CityRepository;
 import com.thoughtworks.trains.ProblemDomain.Respository.EdgeRepository;
 
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 /**
  * DijkstraAlgorithm Algorithm is mainly used to find the shortest route between two points on a graph
- * See <a href="https://www.youtube.com/watch?v=2E7MmKv0Y24">MIT professor explaining Dijkstra's Algorithm </a>
+ * See <a href="https://www.youtube.com/watch?v=2E7MmKv0Y24"> MIT professor explaining Dijkstra's Algorithm </a>
  */
 public class DijkstraAlgorithm implements ITrainsAlgorithm {
 
@@ -54,23 +54,24 @@ public class DijkstraAlgorithm implements ITrainsAlgorithm {
         {
             throw new RouteNotFoundException("NO SUCH ROUTE");
         }
+
         return  route.getLength();
     }
 
     /**
      * {@inheritDoc}
      */
-    public int findLengthOfShortestRoute(String start, String end) throws RouteNotFoundException
+    public int findLengthOfShortestRoute(String startCity, String endCity) throws RouteNotFoundException
     {
         try {
             return findLengthOfShortestRoute(
-                    this.cityRepository.getCityByName(start),
-                    this.cityRepository.getCityByName(end)
+                    this.cityRepository.getCityByName(startCity),
+                    this.cityRepository.getCityByName(endCity)
             );
         }catch (Exception e){
             throw new RouteNotFoundException("NO SUCH ROUTE");
+        }
     }
-}
 
     /**
      * {@inheritDoc}
@@ -78,7 +79,7 @@ public class DijkstraAlgorithm implements ITrainsAlgorithm {
     public int findNumberOfTrips(
             String startCity,
             String endCity,
-            ComparisonOperation operation,
+            ComparisonOperation algorithmFilter,
             Operator operator,
             int operandValue
     ) throws RouteNotFoundException
@@ -87,7 +88,7 @@ public class DijkstraAlgorithm implements ITrainsAlgorithm {
             return filterAllPossibleRoutes(
                     this.cityRepository.getCityByName(startCity),
                     this.cityRepository.getCityByName(endCity),
-                    operation,
+                    algorithmFilter,
                     operator,
                     operandValue
             );
@@ -106,10 +107,10 @@ public class DijkstraAlgorithm implements ITrainsAlgorithm {
     }
 
     /***
-     * @param currentCity
-     * @param sourceCity
-     * @param distanceFromSource
-     * @param routeLengthLimit
+     * @param currentCity at which the route will start discovering (the city at the beginning of a sub route )
+     * @param sourceCity the source city from which the whole route discovery started
+     * @param distanceFromSource distance of the current city from the source city
+     * @param routeLengthLimit (filter) limit on the length of the route to visit
      */
     private void traversePath(City currentCity, City sourceCity, int distanceFromSource, int routeLengthLimit)
     {
@@ -120,7 +121,6 @@ public class DijkstraAlgorithm implements ITrainsAlgorithm {
 
         if(!edgesFromCurrentCity.isEmpty())
         {
-
             for (Edge edge : edgesFromCurrentCity) {
                 int routeLength = distanceFromSource + edge.getEdgeLength();
 
@@ -154,22 +154,22 @@ public class DijkstraAlgorithm implements ITrainsAlgorithm {
     }
 
     /**
-     * @param start
-     * @param end
-     * @return
-     * @throws RouteNotFoundException
+     * @param startCity the city at which the route starts
+     * @param endCity the city at which the route ends
+     * @return the length of the shortest possible route between the start and end city
+     * @throws RouteNotFoundException if the route wasn't found
      */
-    private int findLengthOfShortestRoute(City start, City end) throws RouteNotFoundException
+    private int findLengthOfShortestRoute(City startCity, City endCity) throws RouteNotFoundException
     {
-        discoverGraphAtSourceCity(start, 0);
+        discoverGraphAtSourceCity(startCity, 0);
 
         Route shortestRoute = null;
 
-        for(Map.Entry<String, Route> entry : this.graph.getRoutesList().entrySet())
+        for(Map.Entry<String, Route> entry : this.graph.getRouteMap().entrySet())
         {
             Route route = entry.getValue();
 
-            if(route.getStart().equals(start) &&  route.getEnd().equals(end) )
+            if(route.getStart().equals(startCity) &&  route.getEnd().equals(endCity) )
             {
                 if(shortestRoute == null)
                 {
@@ -193,16 +193,16 @@ public class DijkstraAlgorithm implements ITrainsAlgorithm {
     /**
      * @param startCity city where the route (trip) discovery should start from
      * @param endCity city where the route (trip) discovery should end at
-     * @param operation
-     * @param operator
-     * @param operand
-     * @return
+     * @param algorithmFilter the filter of the operation
+     * @param operator the comparison operator used in the algorithm
+     * @param operandValue the filter applied to the route selection
+     * @return number of all possible trips between the start and end cities
      */
-    private int filterAllPossibleRoutes(City startCity, City endCity, ComparisonOperation operation, Operator operator, int operand)
+    private int filterAllPossibleRoutes(City startCity, City endCity, ComparisonOperation algorithmFilter, Operator operator, int operandValue)
     {
-        switch (operation){
+        switch (algorithmFilter){
             case LENGTH:
-                discoverGraphAtSourceCity(startCity, operand);
+                discoverGraphAtSourceCity(startCity, operandValue);
                 break;
 
             case NUMBER_OF_STOPS:
@@ -212,14 +212,14 @@ public class DijkstraAlgorithm implements ITrainsAlgorithm {
 
         ArrayList<Route> routes = new ArrayList<>();
 
-        for(Map.Entry<String, Route> entry : this.graph.getRoutesList().entrySet())
+        for(Map.Entry<String, Route> entry : this.graph.getRouteMap().entrySet())
         {
             Route route = entry.getValue();
 
             boolean condition = false;
             int leftOperand = 0;
 
-            switch (operation){
+            switch (algorithmFilter){
 
                 case LENGTH:
                     leftOperand = route.getLength();
@@ -233,23 +233,23 @@ public class DijkstraAlgorithm implements ITrainsAlgorithm {
             switch (operator)
             {
                 case EQUAL:
-                    condition = (leftOperand == operand);
+                    condition = (leftOperand == operandValue);
                     break;
 
                 case EQUAL_ORL_ESS:
-                    condition = (leftOperand <= operand);
+                    condition = (leftOperand <= operandValue);
                     break;
 
                 case EQUAL_OR_MORE:
-                    condition = (leftOperand >= operand);
+                    condition = (leftOperand >= operandValue);
                     break;
 
                 case LESS_THAN:
-                    condition = (leftOperand < operand);
+                    condition = (leftOperand < operandValue);
                     break;
 
                 case MORE_THAN:
-                    condition = (leftOperand > operand);
+                    condition = (leftOperand > operandValue);
                     break;
             }
 

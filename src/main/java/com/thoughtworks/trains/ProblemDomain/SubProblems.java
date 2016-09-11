@@ -9,17 +9,16 @@ public class SubProblems
     private Solution solution;
 
     /**
-     * @param solution
-     * @throws Exception
+     * @param solution Solution objects that gives access to the solution algorithm
      */
-    public SubProblems(Solution solution) throws Exception
+    public SubProblems(Solution solution)
     {
         this.solution = solution;
     }
 
     /**
-     * @return
-     * @throws Exception
+     * @return The distance of the route A-B-C
+     * @throws Exception if thr route is invalid
      */
     public int solveSubProblem1()throws Exception
     {
@@ -33,8 +32,8 @@ public class SubProblems
     }
 
     /**
-     * @return
-     * @throws Exception
+     * @return The distance of the route A-D
+     * @throws Exception if thr route is invalid
      */
     public int solveSubProblem2()throws Exception
     {
@@ -47,8 +46,8 @@ public class SubProblems
     }
 
     /**
-     * @return
-     * @throws Exception
+     * @return The distance of the route A-D-C
+     * @throws Exception if thr route is invalid
      */
     public int solveSubProblem3()throws Exception
     {
@@ -62,8 +61,8 @@ public class SubProblems
     }
 
     /**
-     * @return
-     * @throws Exception
+     * @return The distance of the route A-E-B-C-D
+     * @throws Exception if thr route is invalid
      */
     public int solveSubProblem4()throws Exception
     {
@@ -79,8 +78,8 @@ public class SubProblems
     }
 
     /**
-     * @return
-     * @throws Exception
+     * @return The distance of the route A-E-D
+     * @throws Exception if thr route is invalid
      */
     public int solveSubProblem5()throws Exception
     {
@@ -94,8 +93,8 @@ public class SubProblems
     }
 
     /**
-     * @return
-     * @throws Exception
+     * @return The number of trips starting at C and ending at C with a maximum of 3 stops
+     * @throws Exception if thr route is invalid
      */
     public int solveSubProblem6()throws Exception
     {
@@ -110,8 +109,8 @@ public class SubProblems
     }
 
     /**
-     * @return
-     * @throws Exception
+     * @return The number of trips starting at A and ending at C with exactly 4 stops
+     * @throws Exception if thr route is invalid
      */
     public int solveSubProblem7()throws Exception
     {
@@ -127,8 +126,8 @@ public class SubProblems
     }
 
     /**
-     * @return
-     * @throws Exception
+     * @return The length of the shortest route (in terms of distance to travel) from A to C
+     * @throws Exception if thr route is invalid
      */
     public int solveSubProblem8()throws Exception
     {
@@ -138,8 +137,8 @@ public class SubProblems
     }
 
     /**
-     * @return
-     * @throws Exception
+     * @return The length of the shortest route (in terms of distance to travel) from B to B
+     * @throws Exception if thr route is invalid
      */
     public int solveSubProblem9()throws Exception
     {
@@ -149,8 +148,8 @@ public class SubProblems
     }
 
     /**
-     * @return
-     * @throws Exception
+     * @return The number of different routes from C to C with a distance of less than 30
+     * @throws Exception if thr route is invalid
      */
     public int solveSubProblem10()throws Exception
     {

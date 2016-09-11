@@ -11,30 +11,30 @@ public interface ITrainsAlgorithm
     enum ComparisonOperation { LENGTH, NUMBER_OF_STOPS }
 
     /**
-     * @param cities
-     * @return
-     * @throws RouteNotFoundException
+     * @param cities list of the cities that form the route
+     * @return length of the route specified
+     * @throws RouteNotFoundException if the route wasn't found
      */
     int findLengthOfRoute(ArrayList<String> cities) throws RouteNotFoundException;
 
     /**
-     * @param start
-     * @param end
-     * @return
-     * @throws RouteNotFoundException
+     * @param startCity from which the route starts
+     * @param endCity at which the route ends
+     * @return the length of the shortest route between the start and end cities
+     * @throws RouteNotFoundException if the route wasn't found
      */
-    int findLengthOfShortestRoute(String start, String end) throws RouteNotFoundException;
+    int findLengthOfShortestRoute(String startCity, String endCity) throws RouteNotFoundException;
 
     /**
-     * @param start
-     * @param end
-     * @param operation
-     * @param operator
-     * @param operandValue
-     * @return
-     * @throws RouteNotFoundException
+     * @param startCity from which the route starts
+     * @param endCity at which the route ends
+     * @param algorithmFilter the filter of the operation
+     * @param operator the comparison operator used in the algorithm
+     * @param operandValue the filter applied to the route selection
+     * @return number of trips between the start and end cities
+     * @throws RouteNotFoundException if the route wasn't found
      */
-    int findNumberOfTrips(String start, String end, ComparisonOperation operation, Operator operator, int operandValue)
+    int findNumberOfTrips(String startCity, String endCity, ComparisonOperation algorithmFilter, Operator operator, int operandValue)
             throws RouteNotFoundException;
 
 }
