@@ -23,20 +23,23 @@ public class ProblemFileReader implements IProblemStatementReader {
     }
 
     /**
-     * Reads user input through a prompt
+     * Reads user input through a prompt, if input is invalid, show the prompt reader over and over again
      * @return path of the file to be parsed
      */
     private String getFileContent() throws IOException {
 
         String fileContent;
 
-        String filePath = this.getFilePath();
+        do {
+            String filePath = this.getFilePath();
+            try {
+                fileContent = this.parseFile(filePath);
+                break;
+            } catch (Exception e) {
+                System.out.println("Invalid path or corrupted file .. \n" + e.getMessage() + "\n");
+            }
 
-        try {
-            fileContent = this.parseFile(filePath);
-        } catch (Exception e) {
-            throw new IOException("Invalid path or corrupted file .. \n" + e.getMessage() + "\n");
-        }
+        } while (true);
 
         return fileContent;
     }
@@ -59,28 +62,23 @@ public class ProblemFileReader implements IProblemStatementReader {
      * @return String
      * @throws Exception if file is not found or can't be parsed
      */
-    private String parseFile(String filePath) throws Exception {
-
+    private String parseFile(String filePath) throws Exception
+    {
+        filePath = "/users/almasry/Desktop/input.txt";
         File file = new File(filePath);
 
         if (file.canRead()) {
 
             try {
-
                 String fileContent= "";
-
                 BufferedReader reader = new BufferedReader(new FileReader(file));
-
-                String text = null;
+                String text;
 
                 while ((text = reader.readLine()) != null) {
                     fileContent += text;
                 }
 
-                //TODO:: Read all file lines, not just the first one
-
                 return fileContent;
-
             }
             catch (FileNotFoundException e){
 
@@ -88,7 +86,6 @@ public class ProblemFileReader implements IProblemStatementReader {
             }
         }
         else{
-
             throw new InvalidPathException(filePath, "File not readable ..");
         }
     }
@@ -98,8 +95,8 @@ public class ProblemFileReader implements IProblemStatementReader {
      * @param fileContent string
      * @return true if the content of the file is ASCII content, false otherwise
      */
-    private boolean isFileContentPureASCII(String fileContent) {
-
+    private boolean isFileContentPureASCII(String fileContent)
+    {
         return Charset
                 .forName("US-ASCII")
                 .newEncoder()

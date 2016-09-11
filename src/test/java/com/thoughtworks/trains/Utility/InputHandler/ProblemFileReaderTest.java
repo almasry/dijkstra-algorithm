@@ -42,11 +42,6 @@ public class ProblemFileReaderTest {
     }
 
     @Test
-    public void getProblemStatement() throws Exception {
-
-    }
-
-    @Test
     public void testParseFile(){
 
         System.out.println("Reading temp file from path : " + this.filePath);

@@ -1,8 +1,10 @@
 package com.thoughtworks.trains;
 
-import com.thoughtworks.trains.Exception.CliApplicationExceptionHandler;
-import com.thoughtworks.trains.Utility.InputHandler.ProblemFileReader;
-import com.thoughtworks.trains.Utility.InputHandler.IProblemStatementReader;
+import com.thoughtworks.trains.Exception.*;
+import com.thoughtworks.trains.ProblemDomain.*;
+import com.thoughtworks.trains.ProblemDomain.Algorithm.*;
+import com.thoughtworks.trains.Utility.InputHandler.*;
+import com.thoughtworks.trains.Utility.OutputHandler.*;
 
 public class Trains {
 
@@ -16,9 +18,35 @@ public class Trains {
                 (t, e) -> new CliApplicationExceptionHandler(e)
         );
 
-        // can be changed by any other input source
+        // setting the input source of the problem statement
         IProblemStatementReader reader = new ProblemFileReader();
         String problemStatement = reader.getProblemStatement();
+
+        Class<? extends ITrainsAlgorithm> solutionAlgorithm = DijkstraAlgorithm.class;
+
+        Solution solution = new Solution(
+                problemStatement,
+                solutionAlgorithm
+        );
+
+        //Solving sub problems
+
+        SubProblems subProblems = new SubProblems(solution);
+
+        ISolutionRenderer solutionViewer = new PromptSolutionViewer();
+
+        solutionViewer
+                .renderOutput(subProblems::solveSubProblem1)
+                .renderOutput(subProblems::solveSubProblem2)
+                .renderOutput(subProblems::solveSubProblem3)
+                .renderOutput(subProblems::solveSubProblem4)
+                .renderOutput(subProblems::solveSubProblem5)
+                .renderOutput(subProblems::solveSubProblem6)
+                .renderOutput(subProblems::solveSubProblem7)
+                .renderOutput(subProblems::solveSubProblem8)
+                .renderOutput(subProblems::solveSubProblem9)
+                .renderOutput(subProblems::solveSubProblem10)
+        ;
     }
 }
 
