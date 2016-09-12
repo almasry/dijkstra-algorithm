@@ -25,15 +25,15 @@ public class Trains {
         // creating the solution using DijkstraAlgorithm
         Class<? extends ITrainsAlgorithm> solutionAlgorithm = DijkstraAlgorithm.class;
 
-        Solution solution = new Solution(
+        Application application = new Application(
                 problemStatement,
                 solutionAlgorithm
         );
 
         // Solving sub problems and rendering the results
-        SubProblems subProblems = new SubProblems(solution);
+        SubProblems subProblems = new SubProblems(application);
 
-        ISolutionRenderer solutionViewer = new PromptSolutionViewer();
+        IOutputRenderer solutionViewer = new PromptOutputRenderer();
 
         solutionViewer
                 .renderOutput(subProblems::solveSubProblem1)

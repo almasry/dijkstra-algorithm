@@ -18,7 +18,7 @@ class Graph {
      * @param sourceCity the city where the route started at
      * @param distanceFromSource the distance of the current city from the source city
      */
-    void registerRoute(Stack<City> citiesStack , City endCity, City sourceCity, int distanceFromSource)
+    Route registerRoute(Stack<City> citiesStack , City endCity, City sourceCity, int distanceFromSource)
     {
         ArrayList<City> routeCities = new ArrayList<>(citiesStack);
 
@@ -26,9 +26,11 @@ class Graph {
 
         String routeName = getRouteName(routeCities);
 
-        Route route = new Route(sourceCity, endCity, distanceFromSource, citiesStack.size());
+        Route route = new Route(routeName, sourceCity, endCity, distanceFromSource, citiesStack.size());
 
         this.routesMap.put(routeName, route);
+
+        return this.routesMap.get(routeName);
     }
 
     /**

@@ -2,7 +2,7 @@ package com.thoughtworks.trains.ProblemDomain.Algorithm;
 
 import com.thoughtworks.trains.ProblemDomain.Entity.City;
 
-class Route {
+public class Route {
 
     private City start;
 
@@ -12,14 +12,18 @@ class Route {
 
     private int stops;
 
+    private String routeName;
+
     /**
      * @param start city at which the route starts
      * @param end city at which the route ends
      * @param length length of the route
      * @param stops number of stops along the way of the route
      */
-    Route(City start, City end, int length, int stops)
+    public Route(String routeName, City start, City end, int length, int stops)
     {
+        this.routeName = routeName;
+
         this.start = start;
 
         this.end = end;
@@ -46,14 +50,21 @@ class Route {
     /**
      * @return length of the route
      */
-    int getLength() {
+    public int getLength() {
         return length;
     }
 
     /**
      * @return number of stops along the way of the route
      */
-    int getNumberOfStops() {
+    public int getNumberOfStops() {
         return stops;
+    }
+
+    /**
+     * @return number of stops along the way of the route
+     */
+    public String getRouteName() {
+        return routeName;
     }
 }

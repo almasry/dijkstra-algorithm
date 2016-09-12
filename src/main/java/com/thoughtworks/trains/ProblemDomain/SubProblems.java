@@ -1,19 +1,21 @@
 package com.thoughtworks.trains.ProblemDomain;
 
-import com.thoughtworks.trains.ProblemDomain.Algorithm.ITrainsAlgorithm;
+import com.thoughtworks.trains.ProblemDomain.Algorithm.Filter.AbstractFilter;
+import com.thoughtworks.trains.ProblemDomain.Algorithm.Filter.NumberOfStopsFilter;
+import com.thoughtworks.trains.ProblemDomain.Algorithm.Filter.RouteLengthFilter;
 
 import java.util.ArrayList;
 
 public class SubProblems
 {
-    private Solution solution;
+    private Application application;
 
     /**
-     * @param solution Solution objects that gives access to the solution algorithm
+     * @param solution Application objects that gives access to the application algorithm
      */
-    public SubProblems(Solution solution)
+    public SubProblems(Application solution)
     {
-        this.solution = solution;
+        this.application = solution;
     }
 
     /**
@@ -28,7 +30,7 @@ public class SubProblems
         cities.add("B");
         cities.add("C");
 
-        return this.solution.getSolutionAlgorithm().findLengthOfRoute(cities);
+        return this.application.getSolutionAlgorithm().findLengthOfRoute(cities);
     }
 
     /**
@@ -42,7 +44,7 @@ public class SubProblems
         cities.add("A");
         cities.add("D");
 
-        return this.solution.getSolutionAlgorithm().findLengthOfRoute(cities);
+        return this.application.getSolutionAlgorithm().findLengthOfRoute(cities);
     }
 
     /**
@@ -57,7 +59,7 @@ public class SubProblems
         cities.add("D");
         cities.add("C");
 
-        return this.solution.getSolutionAlgorithm().findLengthOfRoute(cities);
+        return this.application.getSolutionAlgorithm().findLengthOfRoute(cities);
     }
 
     /**
@@ -74,7 +76,7 @@ public class SubProblems
         cities.add("C");
         cities.add("D");
 
-        return this.solution.getSolutionAlgorithm().findLengthOfRoute(cities);
+        return this.application.getSolutionAlgorithm().findLengthOfRoute(cities);
     }
 
     /**
@@ -89,7 +91,7 @@ public class SubProblems
         cities.add("E");
         cities.add("D");
 
-        return this.solution.getSolutionAlgorithm().findLengthOfRoute(cities);
+        return this.application.getSolutionAlgorithm().findLengthOfRoute(cities);
     }
 
     /**
@@ -98,14 +100,14 @@ public class SubProblems
      */
     public int solveSubProblem6()throws Exception
     {
-        return this.solution.getSolutionAlgorithm()
-                .findNumberOfTrips(
-                            "C",
-                            "C",
-                            ITrainsAlgorithm.ComparisonOperation.NUMBER_OF_STOPS,
-                            ITrainsAlgorithm.Operator.EQUAL_ORL_ESS,
-                            3
-                );
+        AbstractFilter filter = new NumberOfStopsFilter(
+                                AbstractFilter.Operator.EQUAL_ORL_ESS,
+                                3
+                        );
+
+        return this.application
+                .getSolutionAlgorithm()
+                .findNumberOfTrips("C","C", filter);
     }
 
     /**
@@ -114,15 +116,14 @@ public class SubProblems
      */
     public int solveSubProblem7()throws Exception
     {
-        return  this.solution
+        AbstractFilter filter = new NumberOfStopsFilter(
+                AbstractFilter.Operator.EQUAL,
+                4
+        );
+
+        return  this.application
                 .getSolutionAlgorithm()
-                .findNumberOfTrips(
-                        "A",
-                        "C",
-                        ITrainsAlgorithm.ComparisonOperation.NUMBER_OF_STOPS,
-                        ITrainsAlgorithm.Operator.EQUAL,
-                        4
-                );
+                .findNumberOfTrips( "A","C", filter);
     }
 
     /**
@@ -131,7 +132,7 @@ public class SubProblems
      */
     public int solveSubProblem8()throws Exception
     {
-        return  this.solution
+        return  this.application
                 .getSolutionAlgorithm()
                 .findLengthOfShortestRoute("A", "C");
     }
@@ -142,7 +143,7 @@ public class SubProblems
      */
     public int solveSubProblem9()throws Exception
     {
-        return  this.solution
+        return  this.application
                 .getSolutionAlgorithm()
                 .findLengthOfShortestRoute("B", "B");
     }
@@ -153,15 +154,14 @@ public class SubProblems
      */
     public int solveSubProblem10()throws Exception
     {
-        return  this.solution
+        AbstractFilter filter = new RouteLengthFilter(
+                AbstractFilter.Operator.LESS_THAN,
+                30
+        );
+
+        return  this.application
                 .getSolutionAlgorithm()
-                .findNumberOfTrips(
-                        "C",
-                        "C",
-                        ITrainsAlgorithm.ComparisonOperation.LENGTH,
-                        ITrainsAlgorithm.Operator.LESS_THAN,
-                        30
-                );
+                .findNumberOfTrips("C", "C", filter);
     }
 }
 

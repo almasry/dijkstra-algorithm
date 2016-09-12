@@ -1,6 +1,8 @@
 package com.thoughtworks.trains.ProblemDomain.Algorithm;
 
 import com.thoughtworks.trains.Exception.RouteNotFoundException;
+import com.thoughtworks.trains.ProblemDomain.Algorithm.Filter.DefaultFilter;
+import com.thoughtworks.trains.ProblemDomain.Algorithm.Filter.AbstractFilter;
 import com.thoughtworks.trains.ProblemDomain.Entity.City;
 import com.thoughtworks.trains.ProblemDomain.Entity.Edge;
 import com.thoughtworks.trains.ProblemDomain.Respository.CityRepository;
@@ -46,7 +48,7 @@ public class DijkstraAlgorithm implements ITrainsAlgorithm {
                                         .map(city -> this.cityRepository.getCityByName(city))
                                         .collect(Collectors.toCollection(ArrayList::new));
 
-        discoverGraphAtSourceCity(routeCities.get(0), 0);
+        discoverGraphAtSourceCity(routeCities.get(0), new DefaultFilter());
 
         Route route = this.graph.findRoute(routeCities);
 
@@ -61,13 +63,35 @@ public class DijkstraAlgorithm implements ITrainsAlgorithm {
     /**
      * {@inheritDoc}
      */
-    public int findLengthOfShortestRoute(String startCity, String endCity) throws RouteNotFoundException
+    public int findLengthOfShortestRoute(String nameOfStartCity, String nameOfEndCity) throws RouteNotFoundException
     {
         try {
-            return findLengthOfShortestRoute(
-                    this.cityRepository.getCityByName(startCity),
-                    this.cityRepository.getCityByName(endCity)
-            );
+
+            City startCity  = this.cityRepository.getCityByName(nameOfStartCity);
+            City endCity    = this.cityRepository.getCityByName(nameOfEndCity);
+
+            discoverGraphAtSourceCity(startCity, new DefaultFilter());
+
+            Route shortestRoute = null;
+
+            for(Map.Entry<String, Route> entry : this.graph.getRouteMap().entrySet())
+            {
+                Route route = entry.getValue();
+
+                if(route.getStart().equals(startCity) &&  route.getEnd().equals(endCity) )
+                {
+                    if((shortestRoute == null)  || (route.getLength() < shortestRoute.getLength()))
+                    {
+                        shortestRoute = route;
+                    }
+                }
+            }
+
+            if(shortestRoute == null){
+                throw new RouteNotFoundException("NO SUCH ROUTE");
+            }
+            return shortestRoute.getLength();
+
         }catch (Exception e){
             throw new RouteNotFoundException("NO SUCH ROUTE");
         }
@@ -77,138 +101,34 @@ public class DijkstraAlgorithm implements ITrainsAlgorithm {
      * {@inheritDoc}
      */
     public int findNumberOfTrips(
-            String startCity,
-            String endCity,
-            ComparisonOperation algorithmFilter,
-            Operator operator,
-            int operandValue
+            String nameOfStartCity,
+            String nameOfEndCity,
+            AbstractFilter filter
     ) throws RouteNotFoundException
     {
         try {
-            return filterAllPossibleRoutes(
-                    this.cityRepository.getCityByName(startCity),
-                    this.cityRepository.getCityByName(endCity),
-                    algorithmFilter,
-                    operator,
-                    operandValue
-            );
+
+            City startCity  = this.cityRepository.getCityByName(nameOfStartCity);
+            City endCity    = this.cityRepository.getCityByName(nameOfEndCity);
+
+            return findAllPossibleRoutesBetweenTwoCities(startCity,endCity,filter)
+                    .size();
+
         } catch (Exception e) {
+
             throw new RouteNotFoundException("NO SUCH ROUTE");
         }
-    }
-
-    /**
-     * @param city source city to start the path discovery from
-     * @param routeLengthLimit the limit of the length of the discovered route (search should stop ar this limit)
-     */
-    private void discoverGraphAtSourceCity(City city, int routeLengthLimit)
-    {
-        this.traversePath(city, city, 0, routeLengthLimit);
-    }
-
-    /***
-     * @param currentCity at which the route will start discovering (the city at the beginning of a sub route )
-     * @param sourceCity the source city from which the whole route discovery started
-     * @param distanceFromSource distance of the current city from the source city
-     * @param routeLengthLimit (filter) limit on the length of the route to visit
-     */
-    private void traversePath(City currentCity, City sourceCity, int distanceFromSource, int routeLengthLimit)
-    {
-        this.citiesStack.push(currentCity);
-
-        // getting all edges that start with this city to dig them down $$
-        ArrayList<Edge> edgesFromCurrentCity = this.edgeRepository.fetchByStartCity(currentCity);
-
-        if(!edgesFromCurrentCity.isEmpty())
-        {
-            for (Edge edge : edgesFromCurrentCity) {
-                int routeLength = distanceFromSource + edge.getEdgeLength();
-
-                City nextCity = cityRepository.getCityByName(edge.getEnd().getCityName());
-
-                // Register current route possible route
-                graph.registerRoute(
-                        this.citiesStack,
-                        nextCity,
-                        sourceCity,
-                        routeLength
-                );
-
-                switch (routeLengthLimit) {
-                    case 0:
-                        // Avoid going through circular paths
-                        if (!this.isCircularPath(nextCity)) {
-                            this.traversePath(nextCity, sourceCity, routeLength, routeLengthLimit);
-                        }
-                        break;
-
-                    default:
-                        if (routeLength < routeLengthLimit) {
-                            this.traversePath(nextCity, sourceCity, routeLength, routeLengthLimit);
-                        }
-                }
-            }
-        }
-        // popping the visited city from the stack as all its possible routes have been discovered
-        this.citiesStack.pop();
-    }
-
-    /**
-     * @param startCity the city at which the route starts
-     * @param endCity the city at which the route ends
-     * @return the length of the shortest possible route between the start and end city
-     * @throws RouteNotFoundException if the route wasn't found
-     */
-    private int findLengthOfShortestRoute(City startCity, City endCity) throws RouteNotFoundException
-    {
-        discoverGraphAtSourceCity(startCity, 0);
-
-        Route shortestRoute = null;
-
-        for(Map.Entry<String, Route> entry : this.graph.getRouteMap().entrySet())
-        {
-            Route route = entry.getValue();
-
-            if(route.getStart().equals(startCity) &&  route.getEnd().equals(endCity) )
-            {
-                if(shortestRoute == null)
-                {
-                    shortestRoute = route;
-                }
-                else
-                {
-                    if(route.getLength() < shortestRoute.getLength()){
-                        shortestRoute = route;
-                    }
-                }
-            }
-        }
-
-        if(shortestRoute == null){
-            throw new RouteNotFoundException("NO SUCH ROUTE");
-        }
-        return shortestRoute.getLength();
     }
 
     /**
      * @param startCity city where the route (trip) discovery should start from
      * @param endCity city where the route (trip) discovery should end at
-     * @param algorithmFilter the filter of the operation
-     * @param operator the comparison operator used in the algorithm
-     * @param operandValue the filter applied to the route selection
-     * @return number of all possible trips between the start and end cities
+     * @param filter the filter of the operation
+     * @return list of all possible trips between the start and end cities
      */
-    private int filterAllPossibleRoutes(City startCity, City endCity, ComparisonOperation algorithmFilter, Operator operator, int operandValue)
+    private ArrayList<Route> findAllPossibleRoutesBetweenTwoCities(City startCity, City endCity, AbstractFilter filter)
     {
-        switch (algorithmFilter){
-            case LENGTH:
-                discoverGraphAtSourceCity(startCity, operandValue);
-                break;
-
-            case NUMBER_OF_STOPS:
-                discoverGraphAtSourceCity(startCity, 0);
-                break;
-        }
+        discoverGraphAtSourceCity(startCity, filter);
 
         ArrayList<Route> routes = new ArrayList<>();
 
@@ -216,49 +136,63 @@ public class DijkstraAlgorithm implements ITrainsAlgorithm {
         {
             Route route = entry.getValue();
 
-            boolean condition = false;
-            int leftOperand = 0;
-
-            switch (algorithmFilter){
-
-                case LENGTH:
-                    leftOperand = route.getLength();
-                    break;
-
-                case NUMBER_OF_STOPS:
-                    leftOperand = route.getNumberOfStops();
-                    break;
-            }
-
-            switch (operator)
-            {
-                case EQUAL:
-                    condition = (leftOperand == operandValue);
-                    break;
-
-                case EQUAL_ORL_ESS:
-                    condition = (leftOperand <= operandValue);
-                    break;
-
-                case EQUAL_OR_MORE:
-                    condition = (leftOperand >= operandValue);
-                    break;
-
-                case LESS_THAN:
-                    condition = (leftOperand < operandValue);
-                    break;
-
-                case MORE_THAN:
-                    condition = (leftOperand > operandValue);
-                    break;
-            }
-
-            if(route.getStart().equals(startCity) &&  route.getEnd().equals(endCity) && (condition))
+            if(route.getStart().equals(startCity) &&  route.getEnd().equals(endCity) && (!filter.apply(route)))
             {
                 routes.add(route);
             }
         }
-        return routes.size();
+        return routes;
+    }
+
+    /**
+     * @param city source city to start the path discovery from
+     * @param filter algorithm filter on length and number of sops
+     */
+    private void discoverGraphAtSourceCity(City city, AbstractFilter filter)
+    {
+        this.traversePath(city, city, 0, filter);
+    }
+
+    /***
+     * @param currentCity at which the route will start discovering (the city at the beginning of a sub route )
+     * @param sourceCity the source city from which the whole route discovery started
+     * @param distanceFromSource distance of the current city from the source city
+     * @param filter algorithm filter on length and number of sops
+     */
+    private void traversePath(City currentCity, City sourceCity, int distanceFromSource, AbstractFilter filter)
+    {
+        this.citiesStack.push(currentCity);
+
+        // getting all edges that start with this city to dig them down $$
+        ArrayList<Edge> edgesFromCurrentCity = this.edgeRepository.fetchByStartCity(currentCity);
+
+        for (Edge edge : edgesFromCurrentCity) {
+
+            int routeLength = distanceFromSource + edge.getEdgeLength();
+
+            City nextCity = cityRepository.getCityByName(edge.getEnd().getCityName());
+
+            // Register current route possible route
+            Route route = this.graph.registerRoute(
+                    this.citiesStack,
+                    nextCity,
+                    sourceCity,
+                    routeLength
+            );
+
+            if(filter.getFilterType().equals(AbstractFilter.FilterType.DEFAULT))
+            {
+                if(!this.isCircularPath(nextCity))
+                    this.traversePath(nextCity, sourceCity, routeLength, filter);
+            }
+            else
+            {
+                if (!filter.apply(route))
+                    this.traversePath(nextCity, sourceCity, routeLength, filter);
+            }
+        }
+        // popping the visited city from the stack as all its possible routes have been discovered
+        this.citiesStack.pop();
     }
 
     /**

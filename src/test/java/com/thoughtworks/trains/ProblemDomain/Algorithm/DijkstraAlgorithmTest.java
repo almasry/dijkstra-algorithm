@@ -1,7 +1,9 @@
 package com.thoughtworks.trains.ProblemDomain.Algorithm;
 
 import com.thoughtworks.trains.Exception.RouteNotFoundException;
-import com.thoughtworks.trains.ProblemDomain.Solution;
+import com.thoughtworks.trains.ProblemDomain.Algorithm.Filter.AbstractFilter;
+import com.thoughtworks.trains.ProblemDomain.Algorithm.Filter.NumberOfStopsFilter;
+import com.thoughtworks.trains.ProblemDomain.Application;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,12 +14,12 @@ import static org.junit.Assert.*;
 
 public class DijkstraAlgorithmTest {
 
-    private Solution solution;
+    private Application solution;
 
     @Before
     public void setUp() throws Exception {
 
-        this.solution = new Solution(
+        this.solution = new Application(
                 "Graph: AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7",
                 DijkstraAlgorithm.class
         );
@@ -106,8 +108,7 @@ public class DijkstraAlgorithmTest {
     @Test
     public void findLengthOfShortestRoute() throws Exception {
 
-        int lengthOfShortestRoute = this.solution.getSolutionAlgorithm()
-                                                 .findLengthOfShortestRoute("B", "B");
+        int lengthOfShortestRoute = this.solution.getSolutionAlgorithm().findLengthOfShortestRoute("B", "B");
 
         assertEquals(lengthOfShortestRoute, 9);
     }
@@ -115,14 +116,12 @@ public class DijkstraAlgorithmTest {
     @Test
     public void findNumberOfTrips() throws Exception {
 
-        int numberOfTrips = this.solution.getSolutionAlgorithm()
-                                         .findNumberOfTrips(
-                                              "C",
-                                              "C",
-                                              ITrainsAlgorithm.ComparisonOperation.NUMBER_OF_STOPS,
-                                              ITrainsAlgorithm.Operator.EQUAL_ORL_ESS,
-                                              3
-                                         );
+        AbstractFilter filter = new NumberOfStopsFilter(
+                AbstractFilter.Operator.EQUAL_ORL_ESS,
+                3
+        );
+
+        int numberOfTrips = this.solution.getSolutionAlgorithm().findNumberOfTrips( "C", "C", filter);
 
         assertEquals(numberOfTrips, 2);
     }

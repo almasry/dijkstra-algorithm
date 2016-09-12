@@ -14,7 +14,7 @@ public class SubProblemsTest {
     @Before
     public void setUp() throws Exception {
 
-        Solution solution = new Solution(
+        Application solution = new Application(
                 "Graph: AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7",
                 DijkstraAlgorithm.class
         );
@@ -62,7 +62,7 @@ public class SubProblemsTest {
     @Test
     public void solveSubProblem7() throws Exception {
 
-        assertEquals(this.subpProblems.solveSubProblem7(), 2);
+        assertEquals(this.subpProblems.solveSubProblem7(), 3);
     }
 
     @Test

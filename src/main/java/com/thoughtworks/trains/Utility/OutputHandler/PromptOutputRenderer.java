@@ -2,20 +2,20 @@ package com.thoughtworks.trains.Utility.OutputHandler;
 
 import java.util.concurrent.Callable;
 
-public class PromptSolutionViewer implements ISolutionRenderer {
+public class PromptOutputRenderer implements IOutputRenderer {
 
     private int outputsCounter =0;
 
-    public PromptSolutionViewer() {
+    public PromptOutputRenderer() {
 
-        System.out.println("  ================    Solution  ================ ");
+        System.out.println("  ================    Application  ================ ");
 
     }
 
     /**
      * {@inheritDoc}
      */
-    public PromptSolutionViewer renderOutput(Callable<Integer> callableData) {
+    public PromptOutputRenderer renderOutput(Callable<Integer> callableData) {
 
         try{
             outputsCounter++;

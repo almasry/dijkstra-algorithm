@@ -64,6 +64,7 @@ public class ProblemFileReader implements IProblemStatementReader {
      */
     private String parseFile(String filePath) throws Exception
     {
+        filePath = "/users/almasry/Desktop/input.txt";
         File file = new File(filePath);
 
         if (file.canRead()) {

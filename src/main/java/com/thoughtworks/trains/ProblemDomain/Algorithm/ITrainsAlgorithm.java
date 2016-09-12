@@ -1,14 +1,12 @@
 package com.thoughtworks.trains.ProblemDomain.Algorithm;
 
 import com.thoughtworks.trains.Exception.RouteNotFoundException;
+import com.thoughtworks.trains.ProblemDomain.Algorithm.Filter.AbstractFilter;
 
 import java.util.ArrayList;
 
 public interface ITrainsAlgorithm
 {
-    enum Operator { EQUAL, EQUAL_ORL_ESS, EQUAL_OR_MORE, LESS_THAN, MORE_THAN }
-
-    enum ComparisonOperation { LENGTH, NUMBER_OF_STOPS }
 
     /**
      * @param cities list of the cities that form the route
@@ -28,13 +26,11 @@ public interface ITrainsAlgorithm
     /**
      * @param startCity from which the route starts
      * @param endCity at which the route ends
-     * @param algorithmFilter the filter of the operation
-     * @param operator the comparison operator used in the algorithm
-     * @param operandValue the filter applied to the route selection
+     * @param filter the filter of the operation
      * @return number of trips between the start and end cities
      * @throws RouteNotFoundException if the route wasn't found
      */
-    int findNumberOfTrips(String startCity, String endCity, ComparisonOperation algorithmFilter, Operator operator, int operandValue)
+    int findNumberOfTrips(String startCity, String endCity, AbstractFilter filter)
             throws RouteNotFoundException;
 
 }

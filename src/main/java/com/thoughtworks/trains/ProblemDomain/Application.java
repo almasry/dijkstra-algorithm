@@ -7,7 +7,7 @@ import com.thoughtworks.trains.ProblemDomain.Respository.*;
 
 import java.util.ArrayList;
 
-public final class Solution {
+public final class Application {
 
     private Class<? extends ITrainsAlgorithm> algorithm;
     private String problemStatement;
@@ -20,7 +20,7 @@ public final class Solution {
      * @param algorithm the algorithm used to solve the problem
      * @throws Exception if unable to prepare the problem elements
      */
-    public Solution(String problemStatement, Class<? extends ITrainsAlgorithm> algorithm) throws Exception
+    public Application(String problemStatement, Class<? extends ITrainsAlgorithm> algorithm) throws Exception
     {
         this.problemStatement = problemStatement;
         this.algorithm = algorithm;
