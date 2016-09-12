@@ -28,9 +28,9 @@ class Graph {
 
         Route route = new Route(routeName, sourceCity, endCity, distanceFromSource, citiesStack.size());
 
-        this.routesMap.put(routeName, route);
+        this.routesMap.put(route.getRouteName(), route);
 
-        return this.routesMap.get(routeName);
+        return this.routesMap.get(route.getRouteName());
     }
 
     /**

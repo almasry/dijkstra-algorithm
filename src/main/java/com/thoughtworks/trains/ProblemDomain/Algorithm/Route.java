@@ -20,7 +20,7 @@ public class Route {
      * @param length length of the route
      * @param stops number of stops along the way of the route
      */
-    public Route(String routeName, City start, City end, int length, int stops)
+    Route(String routeName, City start, City end, int length, int stops)
     {
         this.routeName = routeName;
 
@@ -31,20 +31,6 @@ public class Route {
         this.length = length;
 
         this.stops = stops;
-    }
-
-    /**
-     * @return city at which the route starts
-     */
-    City getStart() {
-        return start;
-    }
-
-    /**
-     * @return city at which the route ends
-     */
-    City getEnd() {
-        return end;
     }
 
     /**
@@ -62,9 +48,23 @@ public class Route {
     }
 
     /**
+     * @return city at which the route starts
+     */
+    City getStart() {
+        return start;
+    }
+
+    /**
+     * @return city at which the route ends
+     */
+    City getEnd() {
+        return end;
+    }
+
+    /**
      * @return number of stops along the way of the route
      */
-    public String getRouteName() {
+    String getRouteName() {
         return routeName;
     }
 }

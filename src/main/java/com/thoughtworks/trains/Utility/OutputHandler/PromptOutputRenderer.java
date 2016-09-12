@@ -4,11 +4,11 @@ import java.util.concurrent.Callable;
 
 public class PromptOutputRenderer implements IOutputRenderer {
 
-    private int outputsCounter =0;
+    private int outputsCounter = 0;
 
     public PromptOutputRenderer() {
 
-        System.out.println("  ================    Application  ================ ");
+        System.out.println("  ================    Solution  ================ ");
 
     }
 

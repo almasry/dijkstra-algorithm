@@ -23,8 +23,12 @@ public class ProblemFileReaderTest {
         OutputStreamWriter output;
 
         File file = File.createTempFile("problemStatement", ".txt");
+
+        //noinspection ResultOfMethodCallIgnored
         file.setWritable(true);
+        //noinspection ResultOfMethodCallIgnored
         file.setReadable(true);
+
         output = new OutputStreamWriter(new FileOutputStream(file));
         Writer w = new BufferedWriter(output);
         w.write(text);

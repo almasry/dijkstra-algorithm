@@ -1,5 +1,7 @@
 package com.thoughtworks.trains.Utility.InputHandler;
 
+import com.thoughtworks.trains.Exception.InvalidInputReadingException;
+
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.InvalidPathException;
@@ -10,13 +12,21 @@ public class ProblemFileReader implements IProblemStatementReader {
     /**
      * {@inheritDoc}
      */
-    public String getProblemStatement() throws Exception {
+    public String getProblemStatement() throws InvalidInputReadingException {
 
-        String fileContent = this.getFileContent();
+        String fileContent;
+        try{
+            fileContent = this.getFileContent();
 
-        if ( (fileContent.trim().length() == 0) || !(this.isFileContentPureASCII(fileContent)) )
+            if ( (fileContent.trim().length() == 0) || !(this.isFileContentPureASCII(fileContent)) )
+            {
+                throw new InvalidInputReadingException("File is empty or has invalid (non ASCII) characters ..");
+            }
+        }
+        catch (Exception e)
         {
-            throw new Exception("File is empty or has invalid (non ASCII) characters ..");
+            System.out.println(e.getMessage() + "\n\n");
+            return this.getProblemStatement();
         }
 
         return fileContent;
@@ -26,7 +36,7 @@ public class ProblemFileReader implements IProblemStatementReader {
      * Reads user input through a prompt, if input is invalid, show the prompt reader over and over again
      * @return path of the file to be parsed
      */
-    private String getFileContent() throws IOException {
+    private String getFileContent() throws InvalidInputReadingException {
 
         String fileContent;
 
@@ -64,11 +74,10 @@ public class ProblemFileReader implements IProblemStatementReader {
      */
     private String parseFile(String filePath) throws Exception
     {
-        filePath = "/users/almasry/Desktop/input.txt";
         File file = new File(filePath);
 
         if (file.canRead()) {
-
+            //reading file content
             try {
                 String fileContent= "";
                 BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -82,7 +91,7 @@ public class ProblemFileReader implements IProblemStatementReader {
             }
             catch (FileNotFoundException e){
 
-                throw new Exception("File not found ..");
+                throw new InvalidInputReadingException("File not found ..");
             }
         }
         else{

@@ -25,13 +25,13 @@ public class Trains {
         // creating the solution using DijkstraAlgorithm
         Class<? extends ITrainsAlgorithm> solutionAlgorithm = DijkstraAlgorithm.class;
 
-        Application application = new Application(
+        Application applicationInstance = new Application(
                 problemStatement,
                 solutionAlgorithm
         );
 
         // Solving sub problems and rendering the results
-        SubProblems subProblems = new SubProblems(application);
+        SubProblems subProblems = new SubProblems(applicationInstance);
 
         IOutputRenderer solutionViewer = new PromptOutputRenderer();
 
@@ -49,15 +49,3 @@ public class Trains {
         ;
     }
 }
-
- /*
-
-    Running the program :
-
-    java -jar  trains-problem-1.0-SNAPSHOT.jar
-
-    to change the application source class :
-
-    java -cp target/trains-problem-1.0-SNAPSHOT.jar com.thoughtworks.trains.Trains
-
-  */

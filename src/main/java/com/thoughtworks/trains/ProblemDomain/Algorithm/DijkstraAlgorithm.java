@@ -86,7 +86,6 @@ public class DijkstraAlgorithm implements ITrainsAlgorithm {
                     }
                 }
             }
-
             if(shortestRoute == null){
                 throw new RouteNotFoundException("NO SUCH ROUTE");
             }
@@ -180,6 +179,7 @@ public class DijkstraAlgorithm implements ITrainsAlgorithm {
                     routeLength
             );
 
+            //Applying filters (if applicable )
             if(filter.getFilterType().equals(AbstractFilter.FilterType.DEFAULT))
             {
                 if(!this.isCircularPath(nextCity))
