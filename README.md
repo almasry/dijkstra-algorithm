@@ -1,5 +1,5 @@
-# Solution of the "Trains Problem"
-
+# Solution of the "DirectedGraph" problem
+ 
 
 ## Program design 
 
@@ -24,13 +24,13 @@ Project dependencies and build configuration are managed using Maven (tested usi
 
 To execute the program, please run the following command (no need to CD into the ./target directory):
 
-    java -jar target/trains-problem-1.0-SNAPSHOT.jar
+    java -jar target/directgraph-1.0-SNAPSHOT.jar
 
 
 
 If you run into any problems (on platforms other than unix/linux), you may need to add the -cp directive to the java command to point to the path of the main class "com.thoughtworks.trains.Trains" as following :
 
-    java -cp target/trains-problem-1.0-SNAPSHOT.jar com.thoughtworks.trains.Trains
+    java -cp target/directgraph-1.0-SNAPSHOT.jar com.algorithmatics.directedgraph.DirectedGraph
 
 
 You'll be promoted with a request to enter the path of the file problem. Please enter an absolute path, something like :
@@ -56,5 +56,3 @@ A quick tip: (In case if you're using Intellij, you can adjust the language and 
 ## Test coverage 
 
 The problem domain has a coverage of 82% which is quite okay for the scope of this simple task. 
-
-Thank you for your time and consideration. 
