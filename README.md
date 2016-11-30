@@ -12,7 +12,7 @@ To solve other sub problems that are not just about the shortest route, I implem
 
 ## Program design 
 
-Thw desin of the soltuion followed best practices through carefully applying SOLID principles. I tried to keep the architecture clean, application layers and modules are loosely coupled, through the use of dependency inversion and various levels of abstraction.
+Thw design of the soltuion followed best practices through carefully applying SOLID principles. The application architecture is clean, DRY and application layers and modules are loosely coupled through the use of dependency inversion and various levels of abstraction.
 
 
 ## Installation and Use  
