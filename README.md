@@ -1,13 +1,13 @@
-# Solution of the "DirectedGraph" problem
+# Solution of the "Travelling Salesman Problem" 
  
 
 ## Solution Algorithm 
 
-This is an implementaion of Dijkstra's algorithm which aim at finding the shortest paths between two nodes in a graph, which may represent, for example, road networks. The mathematical explanation of the algorithm could be found at : https://youtu.be/2E7MmKv0Y24 .
+This is an implementaion of Dijkstra's algorithm which aims at finding the shortest paths between two nodes in a graph, which may represent, for example, road networks. The mathematical explanation of the algorithm could be found (by MIT professor Sirini Devadas) at : https://youtu.be/2E7MmKv0Y24 .
 
 This implementation is entirely written from scratch and is not using any external libraries or dependent on other implementations. Dijkstra's algorithm also uses a sort of depth-first-search algorithm to discover the graph nodes.
 
-To solve other sub problems that are not just about the shortest route, I implemeted a filtering mechanism that can be applied to the algorithm to fulfill the requirements of the subprograms.
+To solve other sub-problems that are not just about the shortest route, I implemeted a filtering mechanism that can be applied to the algorithm to fulfill the requirements of the sub-programs.
 
 
 ## Program design 
